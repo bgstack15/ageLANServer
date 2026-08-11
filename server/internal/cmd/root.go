@@ -75,12 +75,13 @@ func runRoot(fs *pflag.FlagSet) (err error, exitCode int) {
 	if usedFile != "" {
 		logger.PrintFile("config", usedFile)
 	}
-	internal.Connectivity = common.DNSConnectivity()
 	if !cfg.Internet {
-	   internal.Connectivity = false
-	   logger.Println("Internet usage is disabled via config.")
+		internal.Connectivity = false
+		logger.Println("Internet usage is disabled via config.")
+	} else {
+		internal.Connectivity = common.DNSConnectivity()
+		models.CacheNetworkInterfaces()
 	}
-	models.CacheNetworkInterfaces()
 	if !internal.Connectivity {
 		logger.Println("No internet connectivity, some features will fallback gracefully.")
 	}
