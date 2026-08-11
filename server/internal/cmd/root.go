@@ -80,7 +80,7 @@ func runRoot(fs *pflag.FlagSet) (err error, exitCode int) {
 		logger.Println("Internet usage is disabled via config.")
 	} else {
 		internal.Connectivity = common.DNSConnectivity()
-		models.CacheNetworkInterfaces()
+		models.CacheNetworkInterfaces(cfg.ExternalIPAddress)
 	}
 	if !internal.Connectivity {
 		logger.Println("No internet connectivity, some features will fallback gracefully.")

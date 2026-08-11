@@ -34,10 +34,10 @@ func localIp(r *http.Request) (ip string) {
 var localSubnets []*net.IPNet
 var publicIp string
 
-func CacheNetworkInterfaces() {
-	if cfg.ExternalIPAddress != "" {
-		if ip := net.ParseIP(cfg.ExternalIPAddress); ip != nil && ip.To4() != nil {
-			publicIp = cfg.ExternalIPAddress
+func CacheNetworkInterfaces(externalIPAddress string) {
+	if externalIPAddress != "" {
+		if ip := net.ParseIP(externalIPAddress); ip != nil && ip.To4() != nil {
+			publicIp = externalIPAddress
 		}
 	} else if internal.Connectivity {
 		if resp, err := http.Get("https://api.ipify.org/"); err == nil {
@@ -52,7 +52,7 @@ func CacheNetworkInterfaces() {
 			}
 		}
 	}
-	if internal.Connectivity || cfg.ExternalIPAddress != "" {
+	if internal.Connectivity || externalIPAddress != "" {
 		if publicIp != "" {
 			if ifs, err := common.RunningNetworkInterfaces(); err == nil {
 				for _, ipNets := range ifs {
